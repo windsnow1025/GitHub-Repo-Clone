@@ -12,7 +12,11 @@ github_token = os.environ.get('GITHUB_TOKEN')
 clone_dir = os.environ.get('CLONE_DIR')
 
 url = f'https://api.github.com/user/repos'
-params = {'per_page': 100, 'page': 1}
+params = {
+    'per_page': 100,
+    'page': 1,
+    'type': 'owner',
+}
 headers = {'Authorization': f'token {github_token}'}
 
 repos = []
