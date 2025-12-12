@@ -1,6 +1,6 @@
 # GitHub Repository Clone
 
-## Development
+## Development and Usage
 
 ### Python uv
 
@@ -17,7 +17,3 @@
   - Environment: Select existing
   - Type: uv
 2. Add New Configuration >> uv run >> script: `./usage/main.py`
-
-## Usage
-
-Before each run, remove all files in the target directory.

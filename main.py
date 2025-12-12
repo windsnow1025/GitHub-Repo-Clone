@@ -1,8 +1,9 @@
 import os
+import shutil
+import subprocess
+import time
 
 import requests
-import subprocess
-
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,6 +33,13 @@ while True:
     params['page'] += 1
 
 print(f"Found {len(repos)} repositories.")
+
+# Auto clean up the clone directory before cloning
+if os.path.exists(clone_dir):
+    shutil.rmtree(clone_dir)
+os.makedirs(clone_dir, exist_ok=True)
+
+time.sleep(1)
 
 # Clone each repository
 for repo in repos:
