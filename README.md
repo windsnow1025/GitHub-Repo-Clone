@@ -1,15 +1,23 @@
 # GitHub Repository Clone
 
-## Setup
+## Development
 
-1. Copy `./.env.example` and rename it to `./.env`, then fill in the environment variables.
-2. Install requirements: `pip install -r requirements.txt`
+### Python uv
 
-## Run
+1. Install uv: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
+2. Install Python in uv: `uv python install 3.12`; upgrade Python in uv: `uv python install 3.12`
+3. Configure requirements:
+  ```bash
+  uv sync
+  ```
+
+### Pycharm Professional
+
+1. Add New Interpreter >> Add Local Interpreter
+  - Environment: Select existing
+  - Type: uv
+2. Add New Configuration >> uv run >> script: `./usage/main.py`
+
+## Usage
 
 Before each run, remove all files in the target directory.
-
-### Steps
-
-1. Add new configuration -> FastAPI
-2. Set Application file to `<root>\fastapi\app\main.py`

@@ -1,0 +1,10 @@
+[project]
+name = "GitHub-Repo-Clone"
+version = "0.1.0"
+description = "GitHub Repository Cloning"
+readme = "README.md"
+dependencies = [
+    "python-dotenv",
+    "requests",
+]
+requires-python = ">=3.12"
