@@ -5,15 +5,15 @@
 ### Python uv
 
 1. Install uv: `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
-2. Install Python in uv: `uv python install 3.12`; upgrade Python in uv: `uv python install 3.12`
+2. Install Python in uv: `uv python install 3.12`; upgrade Python in uv: `uv python upgrade 3.12`
 3. Configure requirements:
   ```bash
-  uv sync
+  uv sync --refresh
   ```
 
-### Pycharm Professional
+### Pycharm
 
 1. Add New Interpreter >> Add Local Interpreter
   - Environment: Select existing
   - Type: uv
-2. Add New Configuration >> uv run >> script: `./usage/main.py`
+2. Add New Configuration >> uv run >> Script: `./main.py`
