@@ -11,7 +11,7 @@
   uv sync --refresh
   ```
 
-### Pycharm Professional
+### Pycharm
 
 1. Add New Interpreter >> Add Local Interpreter
   - Environment: Select existing
