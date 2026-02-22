@@ -16,4 +16,4 @@
 1. Add New Interpreter >> Add Local Interpreter
   - Environment: Select existing
   - Type: uv
-2. Add New Configuration >> uv run >> Script: `./main.py`
+2. Add New Configuration >> uv run >> Script: `./app/main.py`

@@ -4,8 +4,9 @@ import stat
 import shutil
 import subprocess
 
-import httpx
 from dotenv import load_dotenv
+
+from app.github_client import fetch_all_repos
 
 
 def rmtree_readonly(path):
@@ -16,6 +17,12 @@ def rmtree_readonly(path):
     shutil.rmtree(path, onexc=on_error)
 
 
+def reset_dir(path):
+    if os.path.exists(path):
+        rmtree_readonly(path)
+    os.makedirs(path, exist_ok=True)
+
+
 async def main():
     load_dotenv()
 
@@ -23,33 +30,11 @@ async def main():
     clone_dir = os.environ.get('CLONE_DIR')
     temp_dir = os.environ.get('TEMP_DIR')
 
-    url = 'https://api.github.com/user/repos'
-    params = {
-        'per_page': 100,
-        'page': 1,
-        'type': 'owner',
-    }
-    headers = {'Authorization': f'token {github_token}'}
-
-    repos = []
-
-    # Fetch all repositories
-    async with httpx.AsyncClient() as client:
-        while True:
-            response = await client.get(url, headers=headers, params=params)
-            response.raise_for_status()
-            data = response.json()
-            if not data:
-                break
-            repos.extend(data)
-            params['page'] += 1
-
+    repos = await fetch_all_repos(github_token)
     print(f"Found {len(repos)} repositories.")
 
     # Clone to local temp directory to avoid Google Drive interference
-    if os.path.exists(temp_dir):
-        rmtree_readonly(temp_dir)
-    os.makedirs(temp_dir, exist_ok=True)
+    reset_dir(temp_dir)
 
     await asyncio.sleep(1)
 
@@ -62,9 +47,7 @@ async def main():
     print("All repositories cloned. Moving to target directory...")
 
     # Move cloned repos to target directory
-    if os.path.exists(clone_dir):
-        rmtree_readonly(clone_dir)
-    os.makedirs(clone_dir, exist_ok=True)
+    reset_dir(clone_dir)
 
     for repo in repos:
         repo_name = repo['name']
