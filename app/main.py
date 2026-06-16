@@ -1,26 +1,12 @@
 import asyncio
 import os
-import stat
 import shutil
 import subprocess
 
 from dotenv import load_dotenv
 
 from app.github_client import fetch_all_repos
-
-
-def rmtree_readonly(path):
-    def on_error(_func, fpath, _exc_info):
-        os.chmod(fpath, stat.S_IWRITE)
-        os.unlink(fpath)
-
-    shutil.rmtree(path, onexc=on_error)
-
-
-def reset_dir(path):
-    if os.path.exists(path):
-        rmtree_readonly(path)
-    os.makedirs(path, exist_ok=True)
+from app.utils import reset_dir, remove_dir
 
 
 async def main():
@@ -29,6 +15,9 @@ async def main():
     github_token = os.environ.get('GITHUB_TOKEN')
     clone_dir = os.environ.get('CLONE_DIR')
     temp_dir = os.environ.get('TEMP_DIR')
+
+    if not github_token or not clone_dir or not temp_dir:
+        raise ValueError('Missing environment variables.')
 
     repos = await fetch_all_repos(github_token)
     print(f"Found {len(repos)} repositories.")
@@ -56,7 +45,7 @@ async def main():
         print(f"Copying {repo_name}...")
         shutil.copytree(src, dst)
 
-    rmtree_readonly(temp_dir)
+    remove_dir(temp_dir)
 
     print("All repositories moved to target directory.")
 
