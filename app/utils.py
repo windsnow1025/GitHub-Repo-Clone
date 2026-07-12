@@ -1,17 +1,18 @@
-import os
 import shutil
 import stat
+from pathlib import Path
 
 
 def remove_dir(path):
     def on_error(_func, fpath, _exc_info):
-        os.chmod(fpath, stat.S_IWRITE)
-        os.unlink(fpath)
+        Path(fpath).chmod(stat.S_IWRITE)
+        Path(fpath).unlink()
 
     shutil.rmtree(path, onexc=on_error)
 
 
 def reset_dir(path):
-    if os.path.exists(path):
+    path = Path(path)
+    if path.exists():
         remove_dir(path)
-    os.makedirs(path, exist_ok=True)
+    path.mkdir(parents=True, exist_ok=True)

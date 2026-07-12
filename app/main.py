@@ -2,6 +2,7 @@ import asyncio
 import os
 import shutil
 import subprocess
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -19,6 +20,9 @@ async def main():
     if not github_token or not clone_dir or not temp_dir:
         raise ValueError('Missing environment variables.')
 
+    clone_dir = Path(clone_dir)
+    temp_dir = Path(temp_dir)
+
     repos = await fetch_all_repos(github_token)
     print(f"Found {len(repos)} repositories.")
 
@@ -30,7 +34,7 @@ async def main():
     for repo in repos:
         clone_url = repo['clone_url']
         repo_name = repo['name']
-        dest_path = os.path.join(temp_dir, repo_name)
+        dest_path = temp_dir / repo_name
         subprocess.run(['git', 'clone', clone_url, dest_path], check=True)
 
     print("All repositories cloned. Moving to target directory...")
@@ -40,8 +44,8 @@ async def main():
 
     for repo in repos:
         repo_name = repo['name']
-        src = os.path.join(temp_dir, repo_name)
-        dst = os.path.join(clone_dir, repo_name)
+        src = temp_dir / repo_name
+        dst = clone_dir / repo_name
         print(f"Copying {repo_name}...")
         shutil.copytree(src, dst)
 
